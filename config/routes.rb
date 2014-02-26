@@ -1,5 +1,5 @@
 Codeshare::Application.routes.draw do
-  devise_for :users, :controllers => { :omniauth_callbacks => "Users/omniauth_callbacks" }
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" } , :strategy_class => [OmniAuth::Strategies::Facebook, OmniAuth::Strategies::Twitter]
   resources :users
 
   resources :snippets
