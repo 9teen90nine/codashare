@@ -1,0 +1,53 @@
+<% if @user.eql? (current_user) %>
+<div class="row coda-editor">
+  <%= form_for(Snippet.new) do |f| %>
+      <div class="field">
+        <%= f.label :title %><br />
+        <%= f.text_field :title, { class: 'form-control', placeholder: 'Best piece of code ever' } %>
+      </div>
+      <div class="field">
+        <%= f.label :code %><br />
+        <%= f.text_area :code, { class: 'form-control', rows: 12 } %>
+      </div>
+      <div class="field">
+        <%= f.label :lang %><br />
+        <%= f.select(:lang, ['C', 'C++', 'Clojure', 'CSS', 'Delphi', 'diff', 'ERB', 'Go', 'Groovy', 'HAML', 'HTML', 'Java', 'JavaScript', 'JSON', 'Lua', 'PHP', 'Python', 'Ruby', 'Sass', 'SQL', 'Taskpaper', 'XML', 'YAML'], class: 'form-control') %>
+      </div>
+      <%= f.hidden_field :user_id, :value => current_user.id %>
+      <div class="actions">
+        <%= f.submit 'Save snippet!', class: 'btn btn-primary' %>
+      </div>
+  <% end %>
+</div>
+<% end %>
+
+<% if @user.snippets.any? %>
+<div class="row">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Snippet title</th>
+      <th>Edited</th>
+      <% if user_signed_in? %>
+      <th></th>
+      <% end %>
+    </tr>
+    </thead>
+    <tbody>
+    <% @user.snippets.each do |snippet| %>
+    <tr>
+      <td style="vertical-align: middle"><%= link_to snippet.title, snippet_path(snippet) %></td>
+      <td style="vertical-align: middle"><%= snippet.updated_at.to_s %></td>
+      <% if user_signed_in? %>
+      <td class="text-right"><%= link_to 'edit', edit_snippet_path(snippet), {class: 'btn btn-warning btn-mini'} %>
+      <%= link_to 'delete', snippet_path(snippet), {method: :delete, class: 'btn btn-danger btn-mini'} %></td>
+      <% end %>
+    </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+<% end %>
+
+
+

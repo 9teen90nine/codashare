@@ -1,14 +1,48 @@
-<p id="notice"><%= notice %></p>
+<div class="row">
+  <div class="col-md-6">
+    <h2><%= @snippet.title %></h2>
+    <h5>Language: <%= @snippet.lang %></h5>
+  </div>
+  <div class="col-md-6 text-right">
+    <% if @snippet.user.eql? ( current_user ) %>
+        <%= link_to 'Edit', edit_snippet_path(@snippet), class: 'btn btn-warning' %> <%= link_to 'Delete', snippet_path(@snippet), { method: :delete, class: 'btn btn-danger'} %>
+    <% end %>
+  </div>
+</div>
 
-<p>
-  <strong>Code:</strong>
-  <%= @snippet.code %>
-</p>
+<div class="row">
+  <%= raw CodeRay.scan(@snippet.code, @snippet.lang).div(:line_numbers => :inline) %>
+</div>
 
-<p>
-  <strong>Title:</strong>
-  <%= @snippet.title %>
-</p>
 
-<%= link_to 'Edit', edit_snippet_path(@snippet) %> |
-<%= link_to 'Back', snippets_path %>
+
+
+<% @snippet.comments.each do |comment| %>
+    <div class="row">
+    <div class="col-md-12 bg-warning">
+      <italics><%= link_to 'commenter #' + comment.user.id.to_s, user_path(comment.user) %> wrote:</italics>
+      <%= comment.content %>
+      <br/>
+      <% if comment.user.eql? (current_user) %>
+      <%= link_to 'Edit', edit_comment_path(comment) %>  | <%= link_to 'Delete', comment_path(comment), method: :delete %>
+      <% end %>
+    </div>
+    </div>
+    <br/>
+<% end %>
+
+<% if user_signed_in? %>
+<div class="row comment-editor">
+  <%= form_for(Comment.new) do |f| %>
+      <div class="field">
+        <%= f.label :content %><br />
+        <%= f.text_area :content, { class: 'form-control', rows: 5 } %>
+      </div>
+      <%= f.hidden_field :user_id, :value => current_user.id %>
+      <%= f.hidden_field :snippet_id, :value => @snippet.id %>
+      <div class="actions">
+        <%= f.submit 'Post comment', class: 'btn btn-primary' %>
+      </div>
+  <% end %>
+</div>
+<% end %>

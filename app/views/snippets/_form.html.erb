@@ -10,16 +10,20 @@
       </ul>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= f.label :code %><br>
-    <%= f.text_area :code %>
-  </div>
-  <div class="field">
-    <%= f.label :title %><br>
-    <%= f.text_field :title %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+    <div class="field">
+      <%= f.label :title %><br />
+      <%= f.text_field :title, { class: 'form-control', placeholder: 'Best piece of code ever' } %>
+    </div>
+    <div class="field">
+      <%= f.label :lang %><br />
+      <%= f.select(:lang, ['C', 'C++', 'Clojure', 'CSS', 'Delphi', 'diff', 'ERB', 'Go', 'Groovy', 'HAML', 'HTML', 'Java', 'JavaScript', 'JSON', 'Lua', 'PHP', 'Python', 'Ruby', 'Sass', 'SQL', 'Taskpaper', 'XML', 'YAML'], class: 'form-control') %>
+    </div>
+    <div class="field">
+      <%= f.label :code %><br />
+      <%= f.text_area :code, { class: 'form-control', rows: 12 } %>
+    </div>
+    <div class="actions">
+      <%= f.submit 'Save snippet!', class: 'btn btn-primary' %>
+    </div>
   </div>
 <% end %>

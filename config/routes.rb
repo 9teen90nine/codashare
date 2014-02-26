@@ -1,8 +1,13 @@
 Codeshare::Application.routes.draw do
-  resources :comments
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+  resources :users
 
   resources :snippets
 
+  resources :comments
+
+  get '/' => "users#welcome"
+  root to: 'users#welcome'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

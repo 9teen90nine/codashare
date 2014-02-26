@@ -1,10 +1,11 @@
 class SnippetsController < ApplicationController
   before_action :set_snippet, only: [:show, :edit, :update, :destroy]
+  before_filter :authenticate_user!, except: :show
 
   # GET /snippets
   # GET /snippets.json
   def index
-    @snippets = Snippet.all
+    redirect_to root_path
   end
 
   # GET /snippets/1
@@ -26,6 +27,11 @@ class SnippetsController < ApplicationController
   def create
     @snippet = Snippet.new(snippet_params)
 
+    if !@snippet.user.eql? (current_user)
+      @snippet.errors.add(:base, "You're messing with me, huh?")
+      raise ActiveRecord::RecordInvalid.new(@snippet)
+    end
+
     respond_to do |format|
       if @snippet.save
         format.html { redirect_to @snippet, notice: 'Snippet was successfully created.' }
@@ -40,6 +46,12 @@ class SnippetsController < ApplicationController
   # PATCH/PUT /snippets/1
   # PATCH/PUT /snippets/1.json
   def update
+
+    if !@snippet.user.eql? (current_user)
+      @snippet.errors.add(:base, "You're messing with me, huh?")
+      raise ActiveRecord::RecordInvalid.new(@snippet)
+    end
+
     respond_to do |format|
       if @snippet.update(snippet_params)
         format.html { redirect_to @snippet, notice: 'Snippet was successfully updated.' }
@@ -54,10 +66,18 @@ class SnippetsController < ApplicationController
   # DELETE /snippets/1
   # DELETE /snippets/1.json
   def destroy
-    @snippet.destroy
-    respond_to do |format|
-      format.html { redirect_to snippets_url }
-      format.json { head :no_content }
+    if (@snippet.user.eql?( current_user ))
+      user = @snippet.user
+      @snippet.destroy
+      respond_to do |format|
+        format.html { redirect_to user_path(user) }
+        format.json { head :no_content }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to snippet_path(@snippet) }
+        format.json { head :no_content }
+      end
     end
   end
 
@@ -69,6 +89,6 @@ class SnippetsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def snippet_params
-      params.require(:snippet).permit(:code, :title)
+      params.require(:snippet).permit(:code, :title, :user_id, :lang)
     end
 end
