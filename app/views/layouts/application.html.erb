@@ -24,9 +24,9 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <% if user_signed_in? %>
-          <li class="<%= raw request.original_url.include?('users') ? '' : 'active' %>"><a href="<%= user_path(current_user) %>">My snippets</a></li>
+          <li class="<%= raw request.original_url.end_with?('users/' + current_user.id.to_s) ? 'active' : '' %>"><a href="<%= user_path(current_user) %>">My snippets</a></li>
         <% end %>
-        <li class="<%= raw request.original_url.include?('snippets') ? 'active' : '' %>"><a href="<%= snippets_path %>">All snippets</a></li>
+        <li class="<%= raw request.original_url.end_with?('snippets') ? 'active' : '' %>"><a href="<%= snippets_path %>">All snippets</a></li>
       </ul>
       <%#<form class="navbar-form navbar-left" role="search">                               %>
       <%#  <div class="form-group">                                                         %>
