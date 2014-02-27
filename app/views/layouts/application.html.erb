@@ -24,8 +24,9 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <% if user_signed_in? %>
-          <li class="active"><a href="<%= user_path(current_user) %>">My snippets</a></li>
+          <li class="<%= raw request.original_url.include?('users') ? '' : 'active' %>"><a href="<%= user_path(current_user) %>">My snippets</a></li>
         <% end %>
+        <li class="<%= raw request.original_url.include?('snippets') ? 'active' : '' %>"><a href="<%= snippets_path %>">All snippets</a></li>
       </ul>
       <%#<form class="navbar-form navbar-left" role="search">                               %>
       <%#  <div class="form-group">                                                         %>
@@ -36,6 +37,8 @@
       <div class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>
             <%= link_to 'Logout', destroy_user_session_path, method: :delete, class: 'btn btn-danger navbar-btn'  %>
+        <% else %>
+            <%= link_to 'Log in', new_user_session_path, class: 'btn btn-default navbar-btn'  %>
         <% end %>
       </div>
     </div><!-- /.navbar-collapse -->

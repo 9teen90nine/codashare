@@ -1,24 +1,14 @@
-<h1>Listing snippets</h1>
-
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
-      <th>Code</th>
-      <th>Title</th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th>Snippet Title</th>
     </tr>
   </thead>
 
   <tbody>
     <% @snippets.each do |snippet| %>
       <tr>
-        <td><%= snippet.code %></td>
-        <td><%= snippet.title %></td>
-        <td><%= link_to 'Show', snippet %></td>
-        <td><%= link_to 'Edit', edit_snippet_path(snippet) %></td>
-        <td><%= link_to 'Destroy', snippet, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to snippet.title, snippet %></td>
       </tr>
     <% end %>
   </tbody>
@@ -26,4 +16,4 @@
 
 <br>
 
-<%= link_to 'New Snippet', new_snippet_path %>
+<%= link_to 'New Snippet', new_snippet_path, class: 'btn btn-primary' %>

@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   has_many :snippets
   accepts_nested_attributes_for :snippets
   accepts_nested_attributes_for :comments
+  validates_uniqueness_of :email, :allow_blank => true
 
   def self.find_for_facebook_oauth(auth)
     where(:fb_uid => auth.uid).first_or_create do |user|

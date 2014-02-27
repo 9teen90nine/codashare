@@ -1,11 +1,11 @@
 class SnippetsController < ApplicationController
   before_action :set_snippet, only: [:show, :edit, :update, :destroy]
-  before_filter :authenticate_user!, except: :show
+  before_filter :authenticate_user!, except: [:show, :index]
 
   # GET /snippets
   # GET /snippets.json
   def index
-    redirect_to root_path
+    @snippets = Snippet.all
   end
 
   # GET /snippets/1
