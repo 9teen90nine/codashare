@@ -21,6 +21,7 @@ class User < ActiveRecord::Base
   def self.find_for_twitter_oauth(auth)
     where(:vk_uid => auth.uid).first_or_create do |user|
       user.vk_uid = auth.uid
+      user.email = auth.info.nickname + '@twitter.com'
       user.password = Devise.friendly_token[0,20]
     end
   end
